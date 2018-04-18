@@ -1,7 +1,6 @@
 
 package tacos;
 
-import customers.Customer;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,26 +23,8 @@ public class TacoServlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException { 
-        ArrayList<Taqueria> taquerias = new ArrayList<>();
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM taquerias");
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Taqueria newTaqueria = new Taqueria();
-
-                newTaqueria.setId(resultSet.getInt("id"));
-                newTaqueria.setName(resultSet.getString("name"));
-                newTaqueria.setRating(resultSet.getInt("rating"));
-                
-                taquerias.add(newTaqueria);
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        req.setAttribute("taquerias", taquerias);
+        TaqueriaManager manager = (TaqueriaManager) getServletContext().getAttribute("taqueriaManager");
+        req.setAttribute("taquerias", manager.getTaqueriasRatingOrder(dataSource));
         
         req.getRequestDispatcher("/WEB-INF/tacos.jsp").forward(req, resp);
     }

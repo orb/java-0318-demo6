@@ -10,7 +10,7 @@
         <h1>Customer List</h1>
         <ul>
             <c:forEach var="customer" items="${customers}">
-                <li> <a href="/customers/customer?id=${customer.id}">
+                <li> <a href="/db/customer?id=${customer.id}">
                         <c:out value="${customer.name}" /> </a>
                     (<c:out value="${customer.email}" />)</li>
                 </c:forEach>
