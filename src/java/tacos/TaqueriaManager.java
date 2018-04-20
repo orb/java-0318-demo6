@@ -6,76 +6,104 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
-public class TaqueriaManager {
+public class TaqueriaManager extends DBManager {
 
-    public List<Taqueria> getTaqueriasRatingOrder(DataSource dataSource) {
+    @Resource(lookup = "java:app/jdbc/nachoDB")
+    DataSource dataSource;
+
+    private Taqueria taqueriaFromDB(ResultSet resultSet) throws SQLException {
+        Taqueria taqueria = new Taqueria();
+
+        taqueria.setId(resultSet.getInt("id"));
+        taqueria.setName(resultSet.getString("name"));
+        taqueria.setRating(resultSet.getInt("rating"));
+
+        return taqueria;
+    }
+
+    public List<Taqueria> getTaqueriasRatingOrder() {
         ArrayList<Taqueria> taquerias = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
         try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM taquerias order by rating desc, name asc");
-            ResultSet resultSet = statement.executeQuery();
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM taquerias order by rating desc, name asc");
+            resultSet = statement.executeQuery();
+
             while (resultSet.next()) {
-                Taqueria newTaqueria = new Taqueria();
-
-                newTaqueria.setId(resultSet.getInt("id"));
-                newTaqueria.setName(resultSet.getString("name"));
-                newTaqueria.setRating(resultSet.getInt("rating"));
-
-                taquerias.add(newTaqueria);
+                taquerias.add(taqueriaFromDB(resultSet));
             }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+
+        } finally {
+            close(resultSet);
+            close(statement);
+            close(connection);
         }
+
         return taquerias;
     }
 
-    public List<Taqueria> getTaqueriasNameOrder(DataSource dataSource) {
+    public List<Taqueria> getTaqueriasNameOrder() {
         ArrayList<Taqueria> taquerias = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
         try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM taquerias order by name asc");
-            ResultSet resultSet = statement.executeQuery();
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM taquerias order by name asc");
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Taqueria newTaqueria = new Taqueria();
-
-                newTaqueria.setId(resultSet.getInt("id"));
-                newTaqueria.setName(resultSet.getString("name"));
-                newTaqueria.setRating(resultSet.getInt("rating"));
-
-                taquerias.add(newTaqueria);
+                taquerias.add(taqueriaFromDB(resultSet));
             }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+
+        } finally {
+            close(resultSet);
+            close(statement);
+            close(connection);
         }
+
         return taquerias;
     }
 
-    public Taqueria getTaqueriaById(DataSource dataSource, int id) {
+    public Taqueria getTaqueriaById(int id) {
         Taqueria taqueria = null;
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
         try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement("select * from taquerias where id = ?");
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("select * from taquerias where id = ?");
             statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
+
             if (resultSet.next()) {
-                taqueria = new Taqueria();
-
-                taqueria.setId(resultSet.getInt("id"));
-                taqueria.setName(resultSet.getString("name"));
-                taqueria.setRating(resultSet.getInt("rating"));
+                taqueria = taqueriaFromDB(resultSet);
             }
-
-            // omg - I'm not closing my connection!!!
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(); // this would be logged
+
+        } finally {
+            close(resultSet);
+            close(statement);
+            close(connection);
         }
-        
+
         return taqueria;
     }
 }

@@ -4,9 +4,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Error!</title>
+        <title>Demo VI</title>
     </head>
     <body>
-        <h1>Something went wrong, oh well, it's just a class, right?</h1>
+        <h1>Choose wisely:</h1>
+        
+        <a href="/db/customers">customers</a>
+        or
+        <a href="/db/tacos">tacos</a>
+        
     </body>
 </html>

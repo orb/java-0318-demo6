@@ -13,12 +13,11 @@ import javax.servlet.annotation.WebListener;
         user = "app",
         password = "app")
 @WebListener
-public class DBSetupListener implements ServletContextListener {
-
+public class DBSetupListener implements ServletContextListener {    
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("+++++++++++++ TACOS");
-        sce.getServletContext().setAttribute("taqueriaManager", new TaqueriaManager());
+        //sce.getServletContext().setAttribute("taqueriaManager", new TaqueriaManager());
     }
 
     @Override
