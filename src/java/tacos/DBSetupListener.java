@@ -17,6 +17,8 @@ public class DBSetupListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("+++++++++++++ TACOS");
+        
+        // In the non-CDI version we were managing things like this
         //sce.getServletContext().setAttribute("taqueriaManager", new TaqueriaManager());
     }
 

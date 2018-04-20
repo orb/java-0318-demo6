@@ -5,12 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DBManager {
-    int num = 8;
-    
-    public DBManager() {
-    }
 
+/** 
+ * 
+ * This super class provides some convenience methods for DB
+ * manager objects to use.
+ * 
+ */
+public class DBManager {
     protected void close(Connection connection) {
         if (connection != null) {
             try {

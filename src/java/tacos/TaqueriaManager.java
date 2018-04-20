@@ -95,6 +95,7 @@ public class TaqueriaManager extends DBManager {
             if (resultSet.next()) {
                 taqueria = taqueriaFromDB(resultSet);
             }
+            
         } catch (SQLException ex) {
             ex.printStackTrace(); // this would be logged
 
